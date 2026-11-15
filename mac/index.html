@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Robot & Roll — Companion Call</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="mark">R<span>•</span>R</div>
+    <div><h1>Robot & Roll</h1><p class="subtitle">Your presence, anywhere. Private local-network prototype.</p></div>
+    <div id="stateBadge" class="state">Not connected</div>
+  </header>
+  <main>
+    <section class="connection panel">
+      <div><h2>Connect to your robot</h2><p class="hint">Run <code>python3 server.py</code> on the Pi and paste its connection key here.</p></div>
+      <label>Pi hostname or IP <input id="host" value="hackumass-robot.local" spellcheck="false" autocomplete="off"></label>
+      <label>Connection key <input id="key" type="password" placeholder="Key shown in Pi terminal" spellcheck="false" autocomplete="off"></label>
+      <button id="connect" class="primary">Connect dashboard</button>
+    </section>
+    <div class="columns">
+      <div class="stack">
+        <section class="panel">
+          <div class="sectionheading"><h2>Robot camera</h2><span id="camBadge" class="pill">Off</span></div>
+          <div class="video-wrap">
+            <img id="live" alt="Live view from Uokier USB webcam on robot" hidden>
+            <div id="videoPlaceholder" class="placeholder"><div class="lens">◉</div><strong>Robot camera feed</strong><span>Connect to see what's happening near your robot</span></div>
+          </div>
+          <p class="hint">Uokier USB webcam • MJPEG live view • Raspberry Pi /dev/video0</p>
+        </section>
+        <section class="panel">
+          <div class="sectionheading"><h2>Video-call audio</h2><span class="pill">Two-way voice</span></div>
+          <div class="callButtons">
+            <button class="primary" id="startCall" disabled>🎙 Start voice call</button>
+            <button class="danger" id="endCall" disabled>End call</button>
+          </div>
+          <div class="callButtons">
+            <button id="muteMac" disabled>Mute my mic</button>
+            <button id="muteRobot" disabled>Mute robot audio</button>
+          </div>
+          <p id="callStatus" class="hint" aria-live="polite">Not in a call. Mac mic → robot JBL; robot webcam mic → Mac speakers.</p>
+          <p class="hint important">Use headphones on your Mac if possible, and keep the JBL away from the webcam mic to avoid feedback.</p>
+        </section>
+        <section class="panel">
+          <h2>Robot says</h2>
+          <div class="line"><input id="speech" placeholder="Type something for Robot & Roll to say..." maxlength="300"><button id="speak" disabled>Speak 🔊</button></div>
+          <p class="hint">Text-to-speech plays on the Pi's default audio sink (JBL GO 2).</p>
+        </section>
+        <section class="panel">
+          <div class="sectionheading"><h2>Music</h2><button id="refreshMusic" disabled>Refresh tracks</button></div>
+          <div class="line"><select id="tracks" aria-label="Select your own song"><option value="">No songs loaded</option></select><button id="playMusic" disabled>▶ Play</button><button id="stopMusic" disabled>■ Stop</button></div>
+          <p class="hint">Put your own MP3/WAV songs in the Pi's <code>music/</code> folder. Audio plays through JBL GO 2.</p>
+        </section>
+      </div>
+      <div class="stack">
+        <section class="panel motors">
+          <div class="sectionheading"><h2>Drive Robot & Roll</h2><span class="pill warning">Hold to move</span></div>
+          <p class="hint">Keep wheels raised for your first integrated test. Stops automatically when commands stop arriving.</p>
+          <div class="dpad">
+            <div></div><button data-drive="forward" class="drive" disabled>↑<small>Forward</small></button><div></div>
+            <button data-drive="left" class="drive" disabled>←<small>Turn left</small></button>
+            <button id="stop" class="stop danger" disabled>STOP</button>
+            <button data-drive="right" class="drive" disabled>→<small>Turn right</small></button>
+            <div></div><button data-drive="backward" class="drive" disabled>↓<small>Backward</small></button><div></div>
+          </div>
+          <p class="hint">Keyboard: W / A / S / D or arrow keys. Turning requires left/right drive wheels (differential drive).</p>
+          <div class="divider"></div>
+          <h3>Test motors separately</h3>
+          <div class="motorgrid">
+            <div><p>Motor A (left)</p><div class="pair"><button data-drive="leftPlus" class="drive" disabled>+ Positive</button><button data-drive="leftMinus" class="drive" disabled>− Negative</button></div></div>
+            <div><p>Motor B (right)</p><div class="pair"><button data-drive="rightPlus" class="drive" disabled>+ Positive</button><button data-drive="rightMinus" class="drive" disabled>− Negative</button></div></div>
+          </div>
+          <div class="divider"></div>
+          <h3>Both motors together</h3>
+          <div class="pair"><button data-drive="bothPlus" class="drive" disabled>Both +</button><button data-drive="bothMinus" class="drive" disabled>Both −</button></div>
+          <p class="hint">ENA and ENB jumpers installed = full speed. This setup cannot adjust speed until jumpers are removed and enable wires are properly connected.</p>
+        </section>
+        <section class="panel"><h2>System messages</h2><p id="status" aria-live="polite">Connect the dashboard to begin.</p><p class="hint">This is a local Wi-Fi prototype, not an Internet video calling service. Keep access to trusted users only.</p></section>
+      </div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

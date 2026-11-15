@@ -1,0 +1,10 @@
+.access_key
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store
+music/
+*.mp3
+*.wav
+*.log
